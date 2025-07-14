@@ -7,21 +7,20 @@ import { styles } from "../styles";
 import { github } from "../assets";
 import { SectionWrapper } from "../hoc";
 
-// Import images
+// Project images
 import Famefing from "../assets/Famefing_project_image.jpg";
 import pia from "../assets/Pia_Project.jpg";
 import newProjectImage from "../assets/Ai_resume_project.jpg";
 import aestheticCalculator from "../assets/calculator.jpg";
 
-// Register GSAP plugin
 gsap.registerPlugin(ScrollTrigger);
 
-// Merged project data
+// Projects data
 const projects = [
   {
     name: "Famefing.com",
     description:
-      "I created the company's website Famefing.com during my 3-month internship. Built with React.js, it’s a single-page, fully responsive website.",
+      "Built during my internship – a single-page, responsive site using React.js.",
     tags: [
       { name: "React.js", color: "text-blue-500" },
       { name: "responsive", color: "text-green-400" },
@@ -32,7 +31,7 @@ const projects = [
   {
     name: "Piac.com.pk",
     description:
-      "A professional dummy project website. Each component was crafted using best practices and modern web development techniques with React.js and Tailwind CSS.",
+      "A dummy professional airline website crafted with modern React & Tailwind techniques.",
     tags: [
       { name: "React.js", color: "text-blue-500" },
       { name: "Tailwind CSS", color: "text-cyan-400" },
@@ -43,7 +42,7 @@ const projects = [
   {
     name: "AI Resume Builder",
     description:
-      "A recently completed project leveraging React.js for the frontend and open APIs to create a dynamic AI-powered resume builder with Tailwind CSS.",
+      "An AI-powered resume builder using Open APIs and a Tailwind-powered UI.",
     tags: [
       { name: "React.js", color: "text-blue-500" },
       { name: "AI", color: "text-purple-400" },
@@ -54,7 +53,7 @@ const projects = [
   {
     name: "Aesthetic Calculator",
     description:
-      "A sleek and interactive calculator app built with React.js, featuring a modern design and smooth user experience with Tailwind CSS.",
+      "A modern, stylish calculator app with smooth UX and minimal UI design.",
     tags: [
       { name: "React.js", color: "text-blue-500" },
       { name: "Tailwind", color: "text-cyan-400" },
@@ -62,82 +61,64 @@ const projects = [
     image: aestheticCalculator,
     source_code_link: "https://aesthetic-calculator-pink.vercel.app/",
   },
-  // Add any previous existing projects here in similar format
 ];
 
-const ProjectCard = ({
-  index,
-  name,
-  description,
-  tags,
-  image,
-  source_code_link,
-}) => {
+const ProjectCard = ({ name, description, tags, image, source_code_link }) => {
   const cardRef = useRef(null);
 
   useEffect(() => {
     const el = cardRef.current;
-
     gsap.fromTo(
       el,
-      { opacity: 0, y: 100 },
+      { opacity: 0, y: 60 },
       {
         opacity: 1,
         y: 0,
+        duration: 1,
+        ease: "power2.out",
         scrollTrigger: {
           trigger: el,
-          start: "top bottom",
-          end: "top center",
-          scrub: true,
-          markers: false,
+          start: "top 85%",
         },
       }
     );
   }, []);
 
   return (
-    <div ref={cardRef}>
+    <div ref={cardRef} className="w-full">
       <Tilt
-        options={{
-          max: 45,
-          scale: 1,
-          speed: 450,
-        }}
-        className="bg-tertiary p-5 rounded-2xl sm:w-[360px] w-full"
+        options={{ max: 25, scale: 1.02, speed: 400 }}
+        className="bg-tertiary p-5 rounded-2xl w-full sm:w-[360px] shadow-md"
       >
-        <div className="relative w-full h-[230px]">
+        <div className="relative w-full h-[230px] rounded-2xl overflow-hidden">
           <img
             src={image}
-            alt="project_image"
-            className="w-full h-full object-cover object-left rounded-2xl"
+            alt={`${name} screenshot`}
+            className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 flex justify-end m-3 card-img_hover">
-            <div
+          <div className="absolute inset-0 flex justify-end p-3">
+            <button
               onClick={() => window.open(source_code_link, "_blank")}
               className="black-gradient w-10 h-10 rounded-full flex justify-center items-center cursor-pointer"
+              aria-label={`View ${name} source code`}
             >
-              <img
-                src={github}
-                alt="source code"
-                className="w-1/2 h-1/2 object-contain"
-              />
-            </div>
+              <img src={github} alt="GitHub link" className="w-1/2 h-1/2 object-contain" />
+            </button>
           </div>
         </div>
 
         <div className="mt-5">
-          <h3 className="text-white font-bold text-[24px]">{name}</h3>
-          <p className="mt-2 text-secondary text-[14px]">{description}</p>
+          <h3 className="text-white font-bold text-[20px]">{name}</h3>
+          <p className="mt-2 text-secondary text-[14px] leading-relaxed">
+            {description}
+          </p>
         </div>
 
         <div className="mt-4 flex flex-wrap gap-2">
           {tags.map((tag) => (
-            <p
-              key={`${name}-${tag.name}`}
-              className={`text-[14px] ${tag.color}`}
-            >
+            <span key={tag.name} className={`text-[13px] ${tag.color}`}>
               #{tag.name}
-            </p>
+            </span>
           ))}
         </div>
       </Tilt>
@@ -146,46 +127,20 @@ const ProjectCard = ({
 };
 
 const Works = () => {
-  useEffect(() => {
-    gsap.fromTo(
-      ".project-card",
-      {
-        opacity: 0,
-        y: 100,
-      },
-      {
-        opacity: 1,
-        y: 0,
-        stagger: 0.1,
-        scrollTrigger: {
-          trigger: ".works-container",
-          start: "top bottom",
-          end: "top center",
-          scrub: true,
-          markers: false,
-        },
-      }
-    );
-  }, []);
-
   return (
     <>
       <div>
-        <p className={`${styles.sectionSubText}`}>My work</p>
-        <h2 className={`${styles.sectionHeadText}`}>Projects.</h2>
+        <p className={styles.sectionSubText}>My work</p>
+        <h2 className={styles.sectionHeadText}>Projects</h2>
       </div>
 
-      <div className="w-full flex">
-        <p className="mt-3 text-secondary text-[17px] max-w-3xl leading-[30px]">
-          A selection of projects that demonstrate my expertise in frontend development, problem-solving, and building responsive, interactive UIs with modern tools like React and Tailwind CSS.
-        </p>
-      </div>
+      <p className="mt-3 text-secondary text-[16px] max-w-3xl leading-[28px]">
+        Here’s a showcase of projects demonstrating my skills in modern frontend frameworks, responsive design, and clean user interfaces.
+      </p>
 
-      <div className="works-container mt-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 justify-items-center gap-5">
-        {projects.map((project, index) => (
-          <div key={`project-${index}`} className="project-card">
-            <ProjectCard index={index} {...project} />
-          </div>
+      <div className="mt-16 grid gap-10 sm:grid-cols-2 lg:grid-cols-3 justify-items-center">
+        {projects.map((project, i) => (
+          <ProjectCard key={`project-${i}`} {...project} />
         ))}
       </div>
     </>
